@@ -82,6 +82,36 @@ VendorRouter.get('/api/vendors', async (req, res) => {
         res.status(500).json({ error: e.message });
     }
 });
+VendorRouter.post('/api/vendor/reset-password', async (req, res) => {
+    try {
+        const { token, newPassword } = req.body;
 
+        // Verify token
+        const decoded = jwt.verify(token, SECRET_KEY);
+        if (!decoded) {
+            return res.status(400).json({ message: "Invalid or expired token" });
+        }
+
+        // Find vendor and update password
+        const vendor = await Vendor.findById(decoded.id);
+        if (!vendor) {
+            return res.status(400).json({ message: "Vendor not found" });
+        }
+
+        if (newPassword.length < 8) {
+            return res.status(400).json({ message: "Password must be at least 8 characters long" });
+        }
+
+        // Hash new password
+        const salt = await bcrypt.genSalt(10);
+        vendor.password = await bcrypt.hash(newPassword, salt);
+        await vendor.save();
+
+        res.json({ message: "Password reset successful!" });
+
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
 
 module.exports = VendorRouter;

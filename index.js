@@ -7,7 +7,7 @@ const categoryRouter = require('./routes/category');
 const doctorRouter = require('./routes/doctor');
 const videoRouter = require('./routes/video');
 const VendorRouter = require('./routes/vendor'); 
-const App = require('./routes/google_sign_in');
+// const App = require('./routes/google_sign_in');
 const PORT = 3001;
 const app = express();
  const DB = "mongodb+srv://mudassirmohibali:mudassirali@cluster0.3iphi.mongodb.net/";
@@ -19,7 +19,7 @@ const app = express();
  app.use(doctorRouter);
  app.use(videoRouter);
  app.use(VendorRouter);
- app.use(App);
+//  app.use(App);
  mongoose.connect(DB).then(()=>{
     console.log("mongodb connect");
  });
