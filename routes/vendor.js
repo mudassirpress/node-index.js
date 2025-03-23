@@ -60,7 +60,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const vendor = require('../models/vendor');
-const VendorRouter = express.Router();
+const VendorRouter = exprss.Router();
 const jwt = require('jsonwebtoken');
 
 VendorRouter.post('/api/vendor/signup', async(req,res)=>{
