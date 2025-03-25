@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require('express');
 const mongoose = require('mongoose'); 
 const cors = require('cors');
@@ -7,8 +8,11 @@ const categoryRouter = require('./routes/category');
 const doctorRouter = require('./routes/doctor');
 const videoRouter = require('./routes/video');
 const VendorRouter = require('./routes/vendor'); 
+const helpMessageRouter = require('./routes/help_message');
+const emailRouter = require('./routes/email');
 // const App = require('./routes/google_sign_in');
-const PORT = 3001;
+const port = 4000;
+
 const app = express();
  const DB = "mongodb+srv://mudassirmohibali:mudassirali@cluster0.3iphi.mongodb.net/";
  app.use(express.json());
@@ -19,10 +23,12 @@ const app = express();
  app.use(doctorRouter);
  app.use(videoRouter);
  app.use(VendorRouter);
+ app.use(helpMessageRouter);
+ app.use(emailRouter);
 //  app.use(App);
  mongoose.connect(DB).then(()=>{
     console.log("mongodb connect");
  });
-app.listen(PORT, "0.0.0.0",function(){
-    console.log(`server is runing on prot ${PORT}`);
+app.listen(process.env.PORT, "0.0.0.0",function(){
+    console.log(`server is runing on prot ${port}`);
 });

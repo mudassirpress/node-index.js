@@ -8,17 +8,19 @@ const auth = async (req, res, next) => {
         if (!token) {
             return res.status(401).json({ message: "No authentication token, authorization denied" });
         }
-
-        const verified = jwt.verify(token, "passwordKey"); // Fixed method
-        if (!verified) {
-            return res.status(401).json({ message: "Token verification failed, authorization denied" });
+    
+        let verified;
+        try {
+            verified = jwt.verify(token, "passwordKey");
+        } catch (error) {
+            return res.status(401).json({ message: "Invalid or expired token" });
         }
-
-        const user = await User.findById(verified.id) || await Vendor.findById(verified.id);
+    
+        const user = await User.findById(verified.id);
         if (!user) {
-            return res.status(401).json({ message: "User or Vendor not found, authorization denied" });
+            return res.status(401).json({ message: "User not found, authorization denied" });
         }
-
+    
         req.user = user;
         req.token = token;
         next();
@@ -37,16 +39,5 @@ const vendorAuth = (req, res, next) => {
         res.status(500).json({ error: e.message });
     }
 };
-const verifyToken = (req, res, next) => {
-    const token = req.headers.authorization?.split(" ")[1];
-    if (!token) return res.status(403).json({ message: "No token provided" });
-  
-    jwt.verify(token, "your_secret_key", (err, decoded) => {
-      if (err) return res.status(401).json({ message: "Unauthorized" });
-  
-      req.user = decoded;
-      next();
-    });
-  };
 
-module.exports = { auth, vendorAuth,verifyToken };
+module.exports = { auth, vendorAuth };

@@ -58,7 +58,7 @@
 // );
 
 // // ✅ Check Auth Status
-// app.get("/auth/status", (req, res) => {
+// app.get("/auth/us", (req, res) => {
 //   if (req.user) {
 //     res.json({ user: req.user });
 //   } else {
