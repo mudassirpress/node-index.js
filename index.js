@@ -11,7 +11,7 @@ const VendorRouter = require('./routes/vendor');
 const helpMessageRouter = require('./routes/help_message');
 const emailRouter = require('./routes/email');
 // const App = require('./routes/google_sign_in');
-const port = 4000;
+const port = process.env.PORT || 4000;
 
 const app = express();
  const DB = "mongodb+srv://mudassirmohibali:mudassirali@cluster0.3iphi.mongodb.net/";
@@ -29,6 +29,6 @@ const app = express();
  mongoose.connect(DB).then(()=>{
     console.log("mongodb connect");
  });
-app.listen(process.env.PORT, "0.0.0.0",function(){
+app.listen(port, "0.0.0.0",function(){
     console.log(`server is runing on prot ${port}`);
 });
