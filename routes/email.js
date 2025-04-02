@@ -30,21 +30,22 @@ emailRouter.get("/api/email", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch email messages." });
   }
 });
-emailRouter.get("/api/email/:id", async (req, res) => {
-    const { id } = req.params;
-  
-    try {
-      // 🔹 Find message by ID
-      const message = await EmailMessage.findById(id);
-  
-      if (!message) {
-        return res.status(404).json({ error: "Message not found." });
-      }
-  
-      res.status(200).json(message);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch the message." });
+emailRouter.get("/api/email/:email", async (req, res) => {
+  const { email } = req.params;
+
+  try {
+    // 🔹 Find messages by email field
+    const messages = await EmailMessage.find({ email });
+
+    if (!messages.length) {
+      return res.status(404).json({ error: "No messages found for this email." });
     }
-  });
+
+    res.status(200).json(messages);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch messages." });
+  }
+});
+
   
 module.exports = emailRouter;
