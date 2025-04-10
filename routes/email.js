@@ -46,6 +46,22 @@ emailRouter.get("/api/email/:email", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch messages." });
   }
 });
+// 📌 DELETE: Remove an email message by ID
+emailRouter.delete("/api/email/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedMessage = await EmailMessage.findByIdAndDelete(id);
+
+    if (!deletedMessage) {
+      return res.status(404).json({ error: "Message not found." });
+    }
+
+    res.status(200).json({ success: "Message deleted successfully!" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete message." });
+  }
+});
 
   
 module.exports = emailRouter;

@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const Vendor = require('../models/vendor'); // ✅ Correct import
 const VendorRouter = express.Router();
 const jwt = require('jsonwebtoken'); 
+const {auth, vendorAuth} = require('../middleware/auth');
 
 // Vendor Signup
 VendorRouter.post("/api/vendor/signup", async (req, res) => {
@@ -105,35 +106,31 @@ VendorRouter.get('/api/vendors', async (req, res) => {
         res.status(500).json({ error: e.message });
     }
 });
-VendorRouter.post('/api/vendor/reset-password', async (req, res) => {
+// 🔹 Change Password Route (Protected)
+VendorRouter.put('/api/change-password',auth,vendorAuth, async (req, res) => {
     try {
-        const { token, newPassword } = req.body;
+        const { oldPassword, newPassword } = req.body;
+        const vendorId = req.vendor.id; // Extract user ID from JWT token
 
-        // Verify token
-        const decoded = jwt.verify(token, SECRET_KEY);
-        if (!decoded) {
-            return res.status(400).json({ message: "Invalid or expired token" });
+        const user = await Vendor.findById(vendorId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
         }
 
-        // Find vendor and update password
-        const vendor = await Vendor.findById(decoded.id);
-        if (!vendor) {
-            return res.status(400).json({ message: "Vendor not found" });
-        }
-
-        if (newPassword.length < 8) {
-            return res.status(400).json({ message: "Password must be at least 8 characters long" });
+        // Verify old password
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: "Incorrect old password" });
         }
 
         // Hash new password
         const salt = await bcrypt.genSalt(10);
-        vendor.password = await bcrypt.hash(newPassword, salt);
-        await vendor.save();
+        user.password = await bcrypt.hash(newPassword, salt);
 
-        res.json({ message: "Password reset successful!" });
-
-    } catch (e) {
-        res.status(500).json({ error: e.message });
+        await user.save();
+        res.status(200).json({ message: "Password changed successfully" });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 });
 
