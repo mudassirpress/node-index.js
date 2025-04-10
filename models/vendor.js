@@ -51,10 +51,6 @@ const vendorSchema = mongoose.Schema({
             message: "Password must be at least 8 characters long",
         },
     },
-    token:{
-        type:String,
-        required:"",
-    }
 });
 
 const Vendor = mongoose.model("vendor", vendorSchema);
