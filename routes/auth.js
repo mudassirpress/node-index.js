@@ -62,9 +62,7 @@ authRouter.post('/api/signin', async (req, res) => {
             return res.status(400).json({ message: "Incorrect password" });
         }
 
-        // Generate JWT Token
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
-
+        const token = jwt.sign({ id: user._id }, "passwordKey", { expiresIn: "1d" });
         const { password: _, ...userWithoutPassword } = user._doc;
 
         res.json({ token, user: userWithoutPassword });
@@ -72,5 +70,6 @@ authRouter.post('/api/signin', async (req, res) => {
         res.status(500).json({ error: e.message });
     }
 });
+ 
 
 module.exports = authRouter;
