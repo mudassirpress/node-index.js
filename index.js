@@ -10,6 +10,7 @@ const videoRouter = require('./routes/video');
 const VendorRouter = require('./routes/vendor'); 
 const helpMessageRouter = require('./routes/help_message');
 const emailRouter = require('./routes/email');
+const contactInfoRouter = require('./routes/contactInfo');
 // const App = require('./routes/google_sign_in');
 const port = process.env.PORT || 4000;
 
@@ -25,6 +26,7 @@ const app = express();
  app.use(VendorRouter);
  app.use(helpMessageRouter);
  app.use(emailRouter);
+ app.use(contactInfoRouter);
 //  app.use(App);
  mongoose.connect(DB).then(()=>{
     console.log("mongodb connect");
