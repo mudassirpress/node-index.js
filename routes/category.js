@@ -60,6 +60,21 @@ categoryRouter.get('/api/search-category', async (req, res) => {
         return res.status(500).json({ error: e.message });
     }
 });
+// Delete a category by ID
+categoryRouter.delete('/api/category/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedCategory = await Category.findByIdAndDelete(id);
+
+    if (!deletedCategory) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+
+    res.status(200).json({ message: "Category deleted successfully" });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
 
 
 module.exports = categoryRouter;

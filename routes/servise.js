@@ -48,8 +48,6 @@ serviseRouter.put('/api/servise/:id', async (req, res) => {
   }
 });
 
-
-
 // ✅ Delete a service by ID
 serviseRouter.delete('/api/servise/:id', async (req, res) => {
   try {
