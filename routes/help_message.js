@@ -82,7 +82,27 @@ helpMessageRouter.delete("/api/help/:id", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+// Mark a message as read (remove 'New' tag)
+helpMessageRouter.patch("/api/help/:id/read", async (req, res) => {
+  try {
+    const { id } = req.params;
 
+    const updatedMessage = await HelpMessage.findByIdAndUpdate(
+      id,
+      { isNew: false },
+      { new: true }
+    );
+
+    if (!updatedMessage) {
+      return res.status(404).json({ error: "Message not found" });
+    }
+
+    res.status(200).json({ success: true, message: "Message marked as read", data: updatedMessage });
+  } catch (error) {
+    console.error("Error marking message as read:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
   
 module.exports = helpMessageRouter;
