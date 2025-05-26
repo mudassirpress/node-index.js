@@ -12,7 +12,7 @@ const productreviewRouter = require('./routes/product_review');
 const VendorRouter = require('./routes/vendor'); // Vendor Routes
 const orderRouter = require('./routes/orders');
 
-const PORT = 3001;
+const port = process.env.PORT || 4000;
 const app = express();
 
 // MongoDB Connection String
@@ -43,6 +43,6 @@ mongoose.connect(DB, {
 });
 
 // Start the server
-app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server is running on port ${PORT}`);
+app.listen(port, "0.0.0.0", function() {
+    console.log(`Server is running on port ${port}`);
 });
