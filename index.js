@@ -12,7 +12,7 @@ const productreviewRouter = require('./routes/product_review');
 const VendorRouter = require('./routes/vendor'); // Vendor Routes
 const orderRouter = require('./routes/orders');
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 const app = express();
 
 // MongoDB Connection String
