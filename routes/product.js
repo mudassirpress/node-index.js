@@ -3,7 +3,7 @@ const Product = require('../models/product');
 const productRouter = express.Router();
 const {auth,vendorAuth} = require('../middleware/auth');
 
-productRouter.post('/api/product', async (req, res) => {
+productRouter.post('/api/product',auth,vendorAuth, async (req, res) => {
     try {
         const {
             productName,
@@ -147,7 +147,7 @@ productRouter.get('/api/search-products', async (req, res) => {
 });
 
 
-productRouter.put('/api/edit-product/:productId',async(req,res)=>{
+productRouter.put('/api/edit-product/:productId',auth,vendorAuth,async(req,res)=>{
     try{
         const {productId} = req.params;
         const products = await Product.findById(productId);

@@ -9,40 +9,43 @@ const categoryRouter = require('./routes/category');
 const subCategoryRouter = require('./routes/subCategory');
 const productRouter = require('./routes/product');
 const productreviewRouter = require('./routes/product_review');
-const VendorRouter = require('./routes/vendor'); // Vendor Routes
+const VendorRouter = require('./routes/vendor');
 const orderRouter = require('./routes/orders');
 
 const port = process.env.PORT || 3001;
 const app = express();
 
 // MongoDB Connection String
-const DB = "mongodb+srv://mudassirmohibali:mudassirali@cluster0.iwc31.mongodb.net/";
+const DB = "mongodb+srv://mudassirmohibali:mudassirali@cluster0.iwc31.mongodb.net/?retryWrites=true&w=majority";
 
 // Middleware
-app.use(express.json());  // Enable JSON request parsing
-app.use(cors());  // Enable CORS
+app.use(express.json());
+app.use(cors());
 
-// Register Routes
-app.use(authRouter);
-app.use(bannerRouter);
-app.use(categoryRouter);
-app.use(subCategoryRouter);
-app.use(productRouter);
-app.use(productreviewRouter);
-app.use(VendorRouter);
-app.use(orderRouter);
+// Register Routes (this can be delayed if needed)
+// Note: We will only apply these after DB connects.
 
-// Connect to MongoDB
 mongoose.connect(DB, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
 }).then(() => {
-    console.log("MongoDB connected");
-}).catch((err) => {
-    console.error("MongoDB connection error:", err);
-});
+    console.log("✅ MongoDB connected");
 
-// Start the server
-app.listen(port, "0.0.0.0", function() {
-    console.log(`Server is running on port ${port}`);
+    // Register Routes AFTER connection is successful
+    app.use(authRouter);
+    app.use(bannerRouter);
+    app.use(categoryRouter);
+    app.use(subCategoryRouter);
+    app.use(productRouter);
+    app.use(productreviewRouter);
+    app.use(VendorRouter);
+    app.use(orderRouter);
+
+    // Start the server AFTER DB connection
+    app.listen(port, "0.0.0.0", () => {
+        console.log(`🚀 Server is running on port ${port}`);
+    });
+
+}).catch((err) => {
+    console.error("❌ MongoDB connection error:", err.message);
 });
