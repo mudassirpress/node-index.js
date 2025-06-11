@@ -11,6 +11,7 @@ const productRouter = require('./routes/product');
 const productreviewRouter = require('./routes/product_review');
 const VendorRouter = require('./routes/vendor');
 const orderRouter = require('./routes/orders');
+const profileRouter = require('./routes/profile_data');
 
 const port = process.env.PORT || 3001;
 const app = express();
@@ -40,6 +41,7 @@ mongoose.connect(DB, {
     app.use(productreviewRouter);
     app.use(VendorRouter);
     app.use(orderRouter);
+    app.use(profileRouter);
 
     // Start the server AFTER DB connection
     app.listen(port, "0.0.0.0", () => {
