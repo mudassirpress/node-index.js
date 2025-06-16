@@ -4,7 +4,7 @@ const Profile = require("../models/profile_data");  // import your model
 
 // POST create profile
 profileRouter.post("/api/profile", async (req, res) => {
-    const { fullname, email, state, city, locality, gender, phone, profileImage, birthday } = req.body;
+    const { email, state, city, locality, gender, phone, profileImage, birthday } = req.body;
 
     try {
         // check if email already exists
@@ -14,7 +14,6 @@ profileRouter.post("/api/profile", async (req, res) => {
         }
 
         const profile = new Profile({
-            fullname,
             email,
             state,
             city,

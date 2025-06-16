@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require("mongoose");
 const cors = require('cors');
-
+require("dotenv").config();
 // Import Routes
 const authRouter = require('./routes/auth');
 const bannerRouter = require('./routes/banner');
@@ -13,7 +13,7 @@ const VendorRouter = require('./routes/vendor');
 const orderRouter = require('./routes/orders');
 const profileRouter = require('./routes/profile_data');
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 4000;
 const app = express();
 
 // MongoDB Connection String
@@ -44,7 +44,7 @@ mongoose.connect(DB, {
     app.use(profileRouter);
 
     // Start the server AFTER DB connection
-    app.listen(port, "0.0.0.0", () => {
+    app.listen(port, "0.0.0.0", function() {
         console.log(`🚀 Server is running on port ${port}`);
     });
 
