@@ -28,10 +28,6 @@ authRouter.post('/api/signup', async (req, res) => {
         message: "Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character"
       });
     }
-      // ✅ Validate role
-    if (!role || !['admin', 'user'].includes(role)) {
-      return res.status(400).json({ message: "Invalid role selected. Must be 'admin' or 'user'" });
-    }
 
     // ✅ Check for existing email
     const existingUser = await User.findOne({ email });
