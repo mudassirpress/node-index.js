@@ -79,12 +79,14 @@ authRouter.get('/api/user', async (req, res) => {
         res.status(500).json({ error: e.message });
     }
 });
-// 🔹 Delete User by ID
-authRouter.delete('/api/user/:id', async (req, res) => {
+// 🔹 Delete User by Email
+authRouter.delete('/api/user/:email', async (req, res) => {
   try {
-    const { id } = req.params;
+    const { email } = req.params;
 
-    const user = await User.findByIdAndDelete(id);
+    // Delete user from DB by email
+    const user = await User.findOneAndDelete({ email });
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -94,6 +96,7 @@ authRouter.delete('/api/user/:id', async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
+
 
 
 module.exports = authRouter;
