@@ -56,23 +56,34 @@ authRouter.get('/api/user', async (req, res) => {
         res.status(500).json({ error: e.message });
     }
 });
-// 🔹 Delete User by Email
-authRouter.delete('/api/user/:email', async (req, res) => {
+
+authRouter.delete('/api/user', async (req, res) => {
   try {
-    const { email } = req.params;
+    const { email, password } = req.body;
 
-    // Delete user from DB by email
-    const user = await User.findOneAndDelete({ email });
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required." });
     }
 
-    res.status(200).json({ message: "User deleted successfully" });
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Incorrect password." });
+    }
+
+    await User.deleteOne({ email });
+
+    return res.status(200).json({ message: "User deleted successfully." });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
 });
+
 
 
 
