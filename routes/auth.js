@@ -57,9 +57,9 @@ authRouter.get('/api/user', async (req, res) => {
     }
 });
 
-authRouter.delete('/api/user', async (req, res) => {
+authRouter.delete('/api/user/:email/:password', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.params;
 
     if (!email || !password) {
       return res.status(400).json({ message: "Email and password are required." });
@@ -83,7 +83,6 @@ authRouter.delete('/api/user', async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
-
 
 
 
