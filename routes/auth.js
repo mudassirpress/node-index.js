@@ -10,7 +10,7 @@ authRouter.post('/api/signup', async (req, res) => {
     try {
         const { fullname, email, password } = req.body;
 
-        // ✅ Hash Password
+        // ✅ Hash Password password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
